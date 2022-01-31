@@ -1,23 +1,17 @@
+# A wordle clone, inspired by:
+# https://github.com/SamKiehl/ButterDog-Bot/blob/master/main.py
+#
+# This has been tested with Python 3.10
 
 import random
 
 # words, with no newlines
-words = list(map(lambda word: word.strip(), open("words.txt", "r").readlines()))
+COMMON_WORDS = open("common-words.txt").read().splitlines()
 
 # A set can check if a word is part of it
 # in O(1) time, as opposed to something like
 # a O(n) linear search.
-dictionary = set(words)
-
-def valid_guess(guess: str) -> bool:
-    return guess.lower() in dictionary
-
-def get_guess() -> str:
-    x = input("Enter a 5 letter word: ")
-    while not valid_guess(x):
-        print("invalid guess!")
-        x = input(f"Enter a {LENGTH} letter word: ")
-    return x
+DICTIONARY = set(open("all-words.txt").read().splitlines())
 
 # chosen for my terminal
 GREEN_SQUARE  = "✓"
@@ -25,40 +19,56 @@ YELLOW_SQUARE = "-"
 GREY_SQUARE   = " "
 
 LENGTH = 5
+GUESS_LIMIT = 6
 # java is quivering right now
-#  ANSWER = random.choice(words)
-ANSWER = "light"
+ANSWER = random.choice(COMMON_WORDS)
 
-def new_game():
-    ANSWER = random.choice(words)
+def valid_guess(guess: str) -> bool:
+    return guess.lower() in DICTIONARY
 
-def print_squares(original_guess: str):
-    guess = list(original_guess)
+def get_guess() -> str:
+    x = input(f"Enter a {LENGTH} letter word: ")
+    while not valid_guess(x):
+        print("Invalid guess!")
+        x = input(f"Enter a {LENGTH} letter word: ")
+    return x.lower()
+
+def print_squares(guess: str, guesses: int):
     result = [GREY_SQUARE for _ in range(LENGTH)]
+    answer = list(ANSWER) # we will delete letters, as to not find them more than once
 
-    for ans_index, char in enumerate(ANSWER):
-        if char == guess[ans_index]:
-            result[ans_index] = GREEN_SQUARE
-            guess[ans_index] = None
-        elif char in guess:
-            # remove the first instance of the char
-            guess_index = guess.index(char)
-            result[guess_index] = YELLOW_SQUARE
-            guess[guess_index] = None
+    # mark all the letters in the correct place
+    for index, char in enumerate(ANSWER):
+        if char == guess[index]:
+            result[index] = GREEN_SQUARE
+            answer[index] = None
 
-    print(f"|{''.join(result)}|")
-    print(f"|{original_guess}|")
+    # mark all the letters in the wrong place
+    for index, char in enumerate(guess):
+        if char in answer and answer[index] is not None:
+            result[index] = YELLOW_SQUARE
+            answer[index] = None
+
+    print(f" {guesses + 1}/{GUESS_LIMIT} |{''.join(result)}|")
+    print(f"     |{guess}|")
     print("")
+
+def play_game():
+    guesses = 0
+    while (guess := get_guess()) != ANSWER and guesses < GUESS_LIMIT - 1:
+        print_squares(guess, guesses)
+        guesses += 1
+    print_squares(guess, guesses)
+
+    if guess == ANSWER:
+        print("Good Job!")
+    else:
+        print(f'The word was "{ANSWER}"')
 
 # use `main` so that this file
 # can be properly imported as a module
 def main():
-    print(f"{ANSWER=}")
-    print_squares("kitty")
-    print_squares("start")
-    print_squares("brown")
-    print_squares("limit")
-    print_squares("light")
+    play_game()
 
 if __name__ == "__main__":
     main()
