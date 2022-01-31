@@ -40,24 +40,26 @@ def get_guess() -> str:
         x = input(f"Enter a {LENGTH} letter word: ")
     return x.lower()
 
-def print_squares(guess: str, guesses: int):
+def print_squares(original_guess: str, guesses: int):
     result = [GREY_SQUARE for _ in range(LENGTH)]
-    answer = list(ANSWER) # we will delete letters, as to not find them more than once
+    guess = list(original_guess) # we will delete letters, as to not find them more than once
 
     # mark all the letters in the correct place
     for index, char in enumerate(guess):
-        if char == answer[index]:
+        if char == ANSWER[index]:
             result[index] = GREEN_SQUARE
-            answer[index] = None
+            guess[index] = None
 
     # mark all the letters in the wrong place
-    for index, char in enumerate(guess):
-        if answer[index] is not None and char in answer:
-            result[index] = YELLOW_SQUARE
-            answer[answer.index(char)] = None
+    for char in ANSWER:
+        if char in guess:
+            guess_index = guess.index(char)
+            if guess[guess_index] is not None:
+                result[guess_index] = YELLOW_SQUARE
+                guess[guess_index] = None
 
     print(f" {guesses + 1}/{GUESS_LIMIT} |{''.join(result)}|")
-    print(f"     |{guess}|")
+    print(f"     |{original_guess}|")
     print("")
 
 def play_game():
