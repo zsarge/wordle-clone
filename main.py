@@ -21,7 +21,8 @@ GREY_SQUARE   = " "
 LENGTH = 5
 GUESS_LIMIT = 6
 # java is quivering right now
-ANSWER = random.choice(COMMON_WORDS)
+#  ANSWER = random.choice(COMMON_WORDS)
+ANSWER = "loose"
 
 def valid_guess(guess: str) -> bool:
     return guess.lower() in DICTIONARY
@@ -45,9 +46,9 @@ def print_squares(guess: str, guesses: int):
 
     # mark all the letters in the wrong place
     for index, char in enumerate(guess):
-        if char in answer and answer[index] is not None:
+        if answer[index] is not None and char in answer:
             result[index] = YELLOW_SQUARE
-            answer[index] = None
+            answer[answer.index(char)] = None
 
     print(f" {guesses + 1}/{GUESS_LIMIT} |{''.join(result)}|")
     print(f"     |{guess}|")
@@ -68,6 +69,9 @@ def play_game():
 # use `main` so that this file
 # can be properly imported as a module
 def main():
+    #  guesses = ["chair", "quail", "droop", "sends", "moose", "loose"]
+    #  for idx, g in enumerate(guesses):
+        #  print_squares(g, idx)
     play_game()
 
 if __name__ == "__main__":
