@@ -36,10 +36,10 @@ def print_squares(original_guess: str):
     guess = list(original_guess)
     result = [GREY_SQUARE for _ in range(LENGTH)]
 
-    for idx, char in enumerate(ANSWER):
-        if char == guess[idx]:
-            result[idx] = GREEN_SQUARE
-            guess[idx] = None
+    for ans_index, char in enumerate(ANSWER):
+        if char == guess[ans_index]:
+            result[ans_index] = GREEN_SQUARE
+            guess[ans_index] = None
         elif char in guess:
             # remove the first instance of the char
             guess_index = guess.index(char)
@@ -49,11 +49,6 @@ def print_squares(original_guess: str):
     print(f"|{''.join(result)}|")
     print(f"|{original_guess}|")
     print("")
-
-def evaluate_guess(guess: str) -> bool:
-    """ returns True if the guess was correct """
-
-    return False
 
 # use `main` so that this file
 # can be properly imported as a module
