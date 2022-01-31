@@ -26,9 +26,7 @@ LENGTH = 5
 GUESS_LIMIT = 6
 
 # java is quivering right now
-#  ANSWER = random.choice(COMMON_WORDS)
-ANSWER = "loose"
-
+ANSWER = random.choice(COMMON_WORDS)
 
 def valid_guess(guess: str) -> bool:
     return guess.lower() in DICTIONARY
