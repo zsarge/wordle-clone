@@ -5,12 +5,16 @@
 
 import random
 
-# words, with no newlines
+# A list of words with no newlines that the player
+# might be asked to guess.
 COMMON_WORDS = open("common-words.txt").read().splitlines()
 
-# A set can check if a word is part of it
+# This is the dictionary the player's input will be
+# tested against.
+#
+# Note: A set can check if a word is part of it
 # in O(1) time, as opposed to something like
-# a O(n) linear search.
+# a O(n) linear search for a list.
 DICTIONARY = set(open("all-words.txt").read().splitlines())
 
 # chosen for my terminal
@@ -20,9 +24,11 @@ GREY_SQUARE   = " "
 
 LENGTH = 5
 GUESS_LIMIT = 6
+
 # java is quivering right now
 #  ANSWER = random.choice(COMMON_WORDS)
 ANSWER = "loose"
+
 
 def valid_guess(guess: str) -> bool:
     return guess.lower() in DICTIONARY
@@ -39,8 +45,8 @@ def print_squares(guess: str, guesses: int):
     answer = list(ANSWER) # we will delete letters, as to not find them more than once
 
     # mark all the letters in the correct place
-    for index, char in enumerate(ANSWER):
-        if char == guess[index]:
+    for index, char in enumerate(guess):
+        if char == answer[index]:
             result[index] = GREEN_SQUARE
             answer[index] = None
 
@@ -69,9 +75,6 @@ def play_game():
 # use `main` so that this file
 # can be properly imported as a module
 def main():
-    #  guesses = ["chair", "quail", "droop", "sends", "moose", "loose"]
-    #  for idx, g in enumerate(guesses):
-        #  print_squares(g, idx)
     play_game()
 
 if __name__ == "__main__":
